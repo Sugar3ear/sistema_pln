@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import TextoAnalizado
 
-# Register your models here.
+@admin.register(TextoAnalizado)
+class TextoAnalizadoAdmin(admin.ModelAdmin):
+    list_display = ['titulo', 'fecha_subida']
+    list_filter = ['fecha_subida']
+    search_fields = ['titulo']
