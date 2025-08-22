@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+
 import os
 from pathlib import Path
 
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)ef$**)8i-r74kly7@&m+wnph4kl93)g&5-wk#jm!lr^)sqx*8'
+SECRET_KEY = 'django-insecure-qf*gbgq0onmi#!^_%igtkxxp^f2y!qytvxnp!sotpa!@8^^-ke'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -100,15 +101,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+# Internationalization - CONFIGURACIÓN PARA MÉXICO
+LANGUAGE_CODE = 'es-mx'  # Español de México
+TIME_ZONE = 'America/Mexico_City'  # Zona horaria de Ciudad de México
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -121,5 +117,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
