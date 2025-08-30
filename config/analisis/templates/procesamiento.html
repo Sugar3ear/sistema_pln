@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Procesamiento - Sistema de Análisis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #16222a, #3a6073);
+            color: #f5f5f5;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1rem;
+            color: #d0d0d0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+            transition: transform 0.3s;
+            border-left: 4px solid #00b894;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-number {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #aee1d4;
+            margin: 0;
+        }
+        .stat-label {
+            font-size: 1em;
+            color: #d0d0d0;
+        }
+        .text-section {
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+        .text-container {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .text-title {
+            color: #aee1d4;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .badge {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #00b894;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            margin: 10px 5px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: #019875;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: #636e72;
+        }
+        .btn-secondary:hover {
+            background: #4d5356;
+        }
+        .btn-success {
+            background: #0984e3;
+        }
+        .btn-success:hover {
+            background: #076bb5;
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .highlight {
+            background: rgba(255, 243, 205, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ffeaa7;
+        }
+        .palabras-lista {
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+        .help-text {
+            font-size: 0.9em;
+            color: #b2bec3;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        .acento-demo {
+            background: rgba(232, 244, 252, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .acento-ejemplo {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .ejemplo-item {
+            text-align: center;
+            padding: 10px;
+            min-width: 150px;
+        }
+        .ejemplo-original {
+            color: #fab1a0;
+            font-weight: bold;
+        }
+        .ejemplo-procesado {
+            color: #55efc4;
+            font-weight: bold;
+        }
+        pre {
+            white-space: pre-wrap;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            line-height: 1.5;
+        }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            font-size: 0.9rem;
+            color: #b2bec3;
+        }
+        footer a {
+            color: #81ecec;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔍 Detalles del Procesamiento</h1>
+        <div class="subtitle">{{ texto.titulo }}</div>
+    </header>
+    
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_palabras_original }}</div>
+                <div class="stat-label">Palabras originales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_palabras_limpias }}</div>
+                <div class="stat-label">Palabras después de limpieza</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ stopwords_eliminadas }}</div>
+                <div class="stat-label">Stopwords eliminadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ simbolos_eliminados|length|default:"0" }}</div>
+                <div class="stat-label">Símbolos eliminados</div>
+            </div>
+        </div>
+        
+        <div class="text-section">
+            <div class="text-title">
+                <h2>📄 Texto Original</h2>
+                <span class="badge">Sin procesar</span>
+            </div>
+            <div class="text-container">
+                <pre>{{ texto_original }}</pre>
+            </div>
+        </div>
+        
+        <div class="text-section">
+            <div class="text-title">
+                <h2>✨ Texto Procesado</h2>
+                <span class="badge" style="background: #0984e3;">Procesado</span>
+            </div>
+            <div class="text-container">
+                <p>{{ texto_procesado }}</p>
+            </div>
+        </div>
+        
+        {% if simbolos_eliminados %}
+        <div class="text-section">
+            <h2 class="text-title">🔣 Símbolos Eliminados</h2>
+            <div class="text-container">
+                <p>Se eliminaron los siguientes símbolos de puntuación: <span class="highlight">{{ simbolos_eliminados }}</span></p>
+            </div>
+        </div>
+        {% endif %}
+       
+        {% if palabras_con_acentos %}
+        <div class="text-section">
+            <h2 class="text-title">🔤 Palabras con Acentos Preservados</h2>
+            <div class="text-container">
+                <p>Se detectaron y preservaron <strong>{{ palabras_con_acentos|length }}</strong> palabras con acentos:</p>
+                <div class="palabras-lista">
+                    {% for palabra in palabras_con_acentos %}
+                    <span class="highlight">{{ palabra }}</span>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    {% if palabras_con_acentos|length > 20 %}...{% endif %}
+                </div>
+                <p class="help-text">El sistema preserva correctamente las letras acentuadas (á, é, í, ó, ú) y caracteres especiales del español (ñ, ü).</p>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="btn-container">
+            <a href="{% url 'analizar_texto' texto.id %}" class="btn btn-success">📊 Ver Resultados del Análisis</a>
+            <a href="{% url 'lista_textos' %}" class="btn btn-secondary">← Volver a la Lista</a>
+        </div>
+    </div>
+
+    <footer>
+        <a href="/admin/">⚙️ Acceder al panel de administración</a>
+    </footer>
+</body>
+</html>
