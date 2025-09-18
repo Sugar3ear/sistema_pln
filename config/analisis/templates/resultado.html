@@ -253,9 +253,44 @@
                 justify-content: center;
             }
         }
-    </style>
+
+       .formula {
+        font-family: 'Cambria Math', serif;
+        font-size: 1.1em;
+        text-align: center;
+        margin: 15px 0;
+        padding: 10px;
+        background-color: #f0f8ff;
+        border-radius: 5px;
+        border-left: 4px solid #3498db;
+    }
+    
+    .modelo-explicacion {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-left: 4px solid #27ae60;
+    }
+    
+    .comparacion-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+    
+    .comparacion-item {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+</style>
+
 </head>
 <body>
+    
     <div class="container">
         <h1>📊 Resultados del análisis</h1>
         <div class="subtitle">{{ texto.titulo }}</div>
@@ -410,6 +445,109 @@
             <a href="{% url 'ver_procesamiento' texto.id %}" class="btn btn-success">🔍 Ver Detalles de Procesamiento</a>
             <a href="{% url 'lista_textos' %}" class="btn btn-secondary">← Volver a la lista</a>
         </div>
+
+        <!-- Sección para el n-grama principal -->
+{% if ngramas_comparacion %}
+<div class="table-container">
+    <h3>📈 Comparación de Diferentes Modelos de N-gramas</h3>
+    
+    <div class="comparacion-grid">
+        {% for n, probabilidades in ngramas_comparacion.items %}
+            {% if probabilidades %}
+            <div class="comparacion-item">
+                <h4>{{ n }}-gramas</h4>
+                <p class="formula">P(w_i|w_{i-{{ n|add:"-1" }}}^{i-1})</p>
+                <p><strong>Total:</strong> {{ probabilidades|length }} n-gramas únicos</p>
+                <p><strong>Máxima probabilidad:</strong> 
+                    {% with max_item=probabilidades|dictsort:"probabilidad"|last %}
+                    {{ max_item.probabilidad|floatformat:4 }}
+                    {% endwith %}
+                </p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+ <!-- Sección de explicación general de n-gramas -->
+<div class="modelo-explicacion">
+    <h4>🧠 Modelo General de N-gramas</h4>
+    <p>El modelo de n-gramas calcula la probabilidad de una palabra dado su contexto histórico:</p>
+    <p class="formula">P(w_i|w_{i-n+1}^{i-1}) = C(w_{i-n+1}^{i}) / C(w_{i-n+1}^{i-1})</p>
+    <p>Donde:</p>
+    <ul>
+        <li><strong>n</strong>: Orden del n-grama (2=bigramas, 3=trigramas, 4=4-gramas, etc.)</li>
+        <li><strong>w_{i-n+1}^{i-1}</strong>: Contexto histórico de n-1 palabras</li>
+        <li><strong>w_i</strong>: Palabra objetivo cuya probabilidad queremos calcular</li>
+        <li><strong>C(w_{i-n+1}^{i})</strong>: Frecuencia del n-grama completo</li>
+        <li><strong>C(w_{i-n+1}^{i-1})</strong>: Frecuencia del contexto histórico</li>
+    </ul>
+</div>
+
+<!-- Sección de comparación entre modelos -->
+{% if ngramas_comparacion|length > 1 %}
+<div class="table-container">
+    <h3>📊 Comparación entre Modelos de N-gramas</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Modelo</th>
+                <th>Fórmula</th>
+                <th>Contexto</th>
+                <th>Ventajas</th>
+                <th>Desventajas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for n, probabilidades in ngramas_comparacion.items %}
+            {% if probabilidades %}
+            <tr>
+                <td><strong>{{ n }}-gramas</strong></td>
+                <td>P(w_i|w_{i-{{ n|add:"-1" }}}^{i-1})</td>
+                <td>{{ n|add:"-1" }} palabras</td>
+                <td>
+                    {% if n == 2 %}
+                    Menos datos necesarios, menos dispersión
+                    {% elif n == 3 %}
+                    Buen balance contexto-dispersión
+                    {% elif n == 4 %}
+                    Captura estructuras sintácticas
+                    {% else %}
+                    Captura dependencias a largo plazo
+                    {% endif %}
+                </td>
+                <td>
+                    {% if n == 2 %}
+                    Captura menos contexto
+                    {% elif n == 3 %}
+                    Alguna dispersión
+                    {% elif n == 4 %}
+                    Requiere más datos
+                    {% else %}
+                    Alta dispersión, necesita suavizado
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="info-box">
+        <strong>💡 Reflexión sobre modelos de n-gramas:</strong><br>
+        <p>La elección del orden del n-grama representa un trade-off entre:</p>
+        <ul>
+            <li><strong>Capacidad predictiva:</strong> N-gramas de orden superior capturan más contexto</li>
+            <li><strong>Dispersión de datos:</strong> N-gramas de orden superior tienen más problemas de datos escasos</li>
+            <li><strong>Requerimientos computacionales:</strong> El número de n-gramas posibles crece exponencialmente con n</li>
+        </ul>
+        <p>En la práctica, se usan técnicas de suavizado como Kneser-Ney para manejar la dispersión
+        en n-gramas de orden superior.</p>
+    </div>
+</div>
+{% endif %}
     </div>
 </body>
 

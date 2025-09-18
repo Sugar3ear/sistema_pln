@@ -25,13 +25,18 @@ def analizar_texto(request, texto_id, n_grama=1):
     if 'n_grama' in request.GET:
         try:
             n_grama = int(request.GET.get('n_grama', 1))
-            # Validar que n_grama esté en un rango razonable
             if n_grama < 1:
                 n_grama = 1
-            elif n_grama > 10:  # Límite máximo para evitar problemas de rendimiento
-                n_grama = 10
+            elif n_grama > 100:  # Aumentar el límite máximo
+                n_grama = 100
         except (ValueError, TypeError):
             n_grama = 1
+    
+    # Verificar si se solicitan fronteras de oración
+    usar_fronteras = request.GET.get('fronteras', 'false').lower() == 'true'
+    
+    # Obtener n-gramas para comparación (pueden ser configurados)
+    n_gramas_comparacion = [2, 3, 4, 5, 6]  # Puede extenderse según necesidades
     
     texto_obj = get_object_or_404(TextoAnalizado, id=texto_id)
     
@@ -42,10 +47,10 @@ def analizar_texto(request, texto_id, n_grama=1):
     except:
         contenido = ""
     
-    # Procesar el texto usando la nueva funcionalidad que incluye n-gramas
-    resultado = procesar_texto_completo(contenido, n_grama)
+    # Procesar el texto con la nueva función que soporta cualquier n-grama
+    resultado = procesar_texto_completo(contenido, n_grama, usar_fronteras, n_gramas_comparacion)
     
-    # Guardar el contenido original y procesado en la sesión para mostrarlo después
+    # Guardar el contenido original y procesado en la sesión
     request.session['texto_original'] = contenido
     request.session['texto_procesado'] = ' '.join(resultado['palabras_limpias'])
     
@@ -53,11 +58,15 @@ def analizar_texto(request, texto_id, n_grama=1):
         'texto': texto_obj,
         'palabras_comunes': resultado['palabras_comunes'],
         'ngramas_comunes': resultado['ngramas_comunes'],
+        'ngramas_probabilidades': resultado['ngramas_probabilidades'],
+        'ngramas_comparacion': resultado['ngramas_comparacion'],
         'total_palabras': resultado['total_palabras'],
-        'n_grama': n_grama,  # Asegurar que esta variable se pasa
+        'n_grama': n_grama,
+        'usar_fronteras': usar_fronteras,
+        'n_gramas_comparacion': resultado['n_gramas_comparacion'],
         'texto_id': texto_id
     })
-
+    
 def ver_procesamiento(request, texto_id):
     """Vista para mostrar los detalles del procesamiento aplicado"""
     texto_obj = get_object_or_404(TextoAnalizado, id=texto_id)

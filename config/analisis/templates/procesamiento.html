@@ -225,6 +225,48 @@
             <a href="{% url 'analizar_texto' texto.id %}" class="btn btn-success">📊 Ver Resultados del Análisis</a>
             <a href="{% url 'lista_textos' %}" class="btn btn-secondary">← Volver a la Lista</a>
         </div>
+
+        <!-- sección para explicar la notación general -->
+<div class="text-section">
+    <h2>🔢 Notación General de N-gramas y Probabilidades</h2>
+    <div class="text-container">
+        <div class="acento-demo">
+            <h4>Notación para secuencias de palabras:</h4>
+            <p class="formula">w_i^j = (w_i, w_{i+1}, ..., w_j)</p>
+            <p>Ejemplo: <span class="highlight">w_2^6 = (w_2, w_3, w_4, w_5, w_6)</span></p>
+        </div>
+        
+        <div class="modelo-explicacion">
+            <h4>🧮 Modelo General de N-gramas</h4>
+            <p>Para un n-grama de orden n, la probabilidad condicional es:</p>
+            <p class="formula">P(w_i|w_{i-n+1}^{i-1}) = C(w_{i-n+1}^{i}) / C(w_{i-n+1}^{i-1})</p>
+            
+            <p>Para calcular la probabilidad de una secuencia completa:</p>
+            <p class="formula">P(w_1^m) ≈ ∏_{i=1}^m P(w_i|w_{i-n+1}^{i-1})</p>
+            
+            <div class="acento-ejemplo">
+                {% for n in 2|make_list|slice:":5" %}
+                <div class="ejemplo-item">
+                    <h4>Modelo de {{ forloop.counter|add:1 }}-gramas:</h4>
+                    <p class="formula">P(w_i|w_{i-{{ forloop.counter }}}^{i-1})</p>
+                    <p>Contexto: {{ forloop.counter }} palabra(s) anterior(es)</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <h4>📈 Aplicaciones de Modelos de N-gramas</h4>
+            <p>Los modelos de n-gramas se utilizan en:</p>
+            <ul>
+                <li><strong>Predictores de texto:</strong> Sugerir la siguiente palabra al escribir</li>
+                <li><strong>Reconocimiento de voz:</strong> Mejorar la precisión del reconocimiento</li>
+                <li><strong>Traducción automática:</strong> Evaluar la fluidez de las traducciones</li>
+                <li><strong>Corrección gramatical:</strong> Detectar errores en textos</li>
+                <li><strong>Generación de texto:</strong> Crear texto coherente automáticamente</li>
+            </ul>
+        </div>
     </div>
-</body>
+</div>
+    </body>
 </html>
