@@ -47,7 +47,6 @@ def analizar_texto(request, texto_id, n_grama=1):
     except:
         contenido = ""
     
-    # Procesar el texto con la nueva función que soporta cualquier n-grama
     resultado = procesar_texto_completo(contenido, n_grama, usar_fronteras, n_gramas_comparacion)
     
     # Guardar el contenido original y procesado en la sesión
