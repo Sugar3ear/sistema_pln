@@ -4,92 +4,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Textos subidos - Sistema de Análisis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        body {
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
-            color: #333;
+            background: #f0f2f5;
+            color: #2c3e50;
         }
+
         .container {
             max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 30px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
+
         h1 {
-            color: #2c3e50;
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
+            font-weight: 600;
+            color: #1a237e;
+            margin-bottom: 25px;
         }
+
         .btn {
             display: inline-block;
-            padding: 10px 20px;
-            background: #3498db;
-            color: white;
+            padding: 12px 24px;
+            background: #1a73e8;
+            color: #fff;
             text-decoration: none;
-            border-radius: 5px;
-            margin: 10px 0;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 14px;
             transition: background 0.3s;
         }
+
         .btn:hover {
-            background: #2980b9;
+            background: #0d47a1;
         }
+
         .btn-analizar {
-            background: #27ae60;
+            background: #43a047;
         }
+
         .btn-analizar:hover {
-            background: #219a52;
+            background: #2e7d32;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 25px;
+            font-size: 0.95rem;
         }
+
         th, td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #e0e0e0;
         }
+
         th {
-            background-color: #34495e;
-            color: white;
+            background: #1a237e;
+            color: #fff;
+            font-weight: 500;
         }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
         tr:hover {
-            background-color: #f5f5f5;
+            background: #e8f0fe;
         }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ngram-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .ngram-link {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: 1px solid transparent;
+            font-weight: 500;
+        }
+
+        .ngram-link.bigramas {
+            background: #e3f2fd;
+            border-color: #bbdefb;
+        }
+
+        .ngram-link.trigramas {
+            background: #e8f5e9;
+            border-color: #c8e6c9;
+        }
+
+        .ngram-link.cuatrogramas {
+            background: #fff3e0;
+            border-color: #ffe0b2;
+        }
+
+        .ngram-link.cincogramas {
+            background: #f3e5f5;
+            border-color: #e1bee7;
+        }
+
+        .ngram-link:hover {
+            opacity: 0.85;
+        }
+
         .empty-state {
             text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
+            padding: 50px 20px;
+            color: #78909c;
         }
-        .empty-state i {
-            font-size: 48px;
-            margin-bottom: 20px;
+
+        .empty-state div {
+            font-size: 42px;
+            margin-bottom: 15px;
         }
+
         .admin-link {
             display: block;
             text-align: center;
             margin-top: 30px;
-            color: #95a5a6;
+            font-size: 0.9rem;
+            color: #546e7a;
             text-decoration: none;
+            transition: color 0.3s;
         }
+
         .admin-link:hover {
-            color: #7f8c8d;
+            color: #1a237e;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📚 Textos subidos para análisis</h1>
-        
+        <h1>📚 Textos subidos</h1>
+
         <a href="{% url 'subir_texto' %}" class="btn">📤 Subir nuevo texto</a>
-        
+
         {% if textos %}
         <table>
             <thead>
@@ -105,30 +173,16 @@
                     <td><strong>{{ texto.titulo }}</strong></td>
                     <td>{{ texto.fecha_subida|date:"d/m/Y H:i" }}</td>
                     <td>
-    <a href="{% url 'analizar_texto' texto.id %}" class="btn btn-analizar">📊 Analizar</a>
-    <div style="margin-top: 5px; display: flex; gap: 5px; flex-wrap: wrap;">
-        <a href="{% url 'analizar_texto' texto.id %}?n_grama=2" 
-           style="font-size: 11px; padding: 2px 6px; background: #e3f2fd; 
-                  border-radius: 3px; text-decoration: none; border: 1px solid #bbdefb;">
-            Bigramas
-        </a>
-        <a href="{% url 'analizar_texto' texto.id %}?n_grama=3" 
-           style="font-size: 11px; padding: 2px 6px; background: #e8f5e9; 
-                  border-radius: 3px; text-decoration: none; border: 1px solid #c8e6c9;">
-            Trigramas
-        </a>
-        <a href="{% url 'analizar_texto' texto.id %}?n_grama=4" 
-           style="font-size: 11px; padding: 2px 6px; background: #fff3e0; 
-                  border-radius: 3px; text-decoration: none; border: 1px solid #ffe0b2;">
-            4-gramas
-        </a>
-        <a href="{% url 'analizar_texto' texto.id %}?n_grama=5" 
-           style="font-size: 11px; padding: 2px 6px; background: #f3e5f5; 
-                  border-radius: 3px; text-decoration: none; border: 1px solid #e1bee7;">
-            5-gramas
-        </a>
-    </div>
-</td>
+                        <div class="actions">
+                            <a href="{% url 'analizar_texto' texto.id %}" class="btn btn-analizar">📊 Analizar</a>
+                            <div class="ngram-links">
+                                <a href="{% url 'analizar_texto' texto.id %}?n_grama=2" class="ngram-link bigramas">Bigramas</a>
+                                <a href="{% url 'analizar_texto' texto.id %}?n_grama=3" class="ngram-link trigramas">Trigramas</a>
+                                <a href="{% url 'analizar_texto' texto.id %}?n_grama=4" class="ngram-link cuatrogramas">4-gramas</a>
+                                <a href="{% url 'analizar_texto' texto.id %}?n_grama=5" class="ngram-link cincogramas">5-gramas</a>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -140,8 +194,8 @@
             <p>Sube tu primer archivo de texto para comenzar el análisis</p>
         </div>
         {% endif %}
-        
-        <a href="/admin/" class="admin-link">Acceder al panel de administración</a>
+
+        <a href="/admin/" class="admin-link">⚙️ Acceder al panel de administración</a>
     </div>
 </body>
 </html>

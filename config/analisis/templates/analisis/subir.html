@@ -4,94 +4,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subir archivo - Sistema de Análisis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        body {
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
+            padding: 0;
+            background: #f0f2f5;
             color: #2c3e50;
-            text-align: center;
-            margin-bottom: 30px;
         }
+
+        .container {
+            max-width: 550px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #1a237e;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #37474f;
         }
-        input[type="text"], input[type="file"] {
+
+        input[type="text"],
+        input[type="file"] {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
+            padding: 14px 16px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafafa;
+            transition: border 0.3s, background 0.3s;
         }
-        input[type="text"]:focus, input[type="file"]:focus {
-            border-color: #3498db;
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            border-color: #1a73e8;
+            background: #fff;
             outline: none;
         }
+
         button {
             width: 100%;
-            padding: 15px;
-            background: #3498db;
-            color: white;
+            padding: 14px;
+            background: #1a73e8;
+            color: #fff;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s ease;
         }
+
         button:hover {
-            background: #2980b9;
+            background: #0d47a1;
         }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #7f8c8d;
-            text-decoration: none;
-        }
-        .back-link:hover {
-            color: #34495e;
-        }
+
         .help-text {
-            font-size: 14px;
-            color: #7f8c8d;
+            font-size: 13px;
+            color: #607d8b;
             margin-top: 5px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            text-align: center;
+            width: 100%;
+            text-decoration: none;
+            font-size: 14px;
+            color: #546e7a;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #1a237e;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📤 Subir archivo de texto</h1>
+        <h1>📤 Subir archivo</h1>
         
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
             <div class="form-group">
-                <label for="id_titulo">Título del texto:</label>
+                <label for="id_titulo">Título del texto</label>
                 <input type="text" name="titulo" id="id_titulo" required placeholder="Ej: Análisis de noticias">
                 <div class="help-text">Asigna un nombre descriptivo a tu archivo</div>
             </div>
             
             <div class="form-group">
-                <label for="id_archivo">Seleccionar archivo:</label>
+                <label for="id_archivo">Seleccionar archivo</label>
                 <input type="file" name="archivo" id="id_archivo" accept=".txt,.text" required>
                 <div class="help-text">Formatos aceptados: .txt (archivos de texto plano)</div>
             </div>

@@ -4,112 +4,251 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados del análisis - Sistema de Análisis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f0f2f5;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
             color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
             text-align: center;
+            font-weight: 600;
+            color: #1a237e;
             margin-bottom: 10px;
         }
+
         .subtitle {
             text-align: center;
-            color: #7f8c8d;
-            margin-bottom: 30px;
+            color: #607d8b;
+            margin-bottom: 25px;
         }
+
+        .info-box {
+            background: #f9f9f9;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #1a73e8;
+            margin-bottom: 25px;
+        }
+
         .stats-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #1a73e8;
+            color: #fff;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 16px;
             text-align: center;
             margin-bottom: 30px;
         }
+
         .stats-number {
-            font-size: 3em;
-            font-weight: bold;
+            font-size: 2.5rem;
+            font-weight: 600;
             margin: 0;
         }
+
         .stats-label {
-            font-size: 1.2em;
+            font-size: 1rem;
             opacity: 0.9;
         }
+
+        .results-container {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .results-column {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .table-container {
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .table-title {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a237e;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 6px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            font-size: 0.95rem;
         }
+
         th, td {
-            padding: 15px;
+            padding: 10px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #e0e0e0;
         }
+
         th {
-            background-color: #34495e;
-            color: white;
-            position: sticky;
-            top: 0;
+            background: #1a237e;
+            color: #fff;
         }
+
         tr:nth-child(even) {
-            background-color: #f8f9fa;
+            background: #f5f5f5;
         }
+
         tr:hover {
-            background-color: #e3f2fd;
+            background: #e8f0fe;
         }
+
         .word-rank {
-            font-weight: bold;
-            color: #2c3e50;
             text-align: center;
+            font-weight: 600;
+            color: #1a237e;
         }
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 10px 5px;
+
+        .progress-bar {
+            background: #eceff1;
+            height: 6px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1a73e8, #43a047);
+        }
+
+        .ngram-config {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        .ngram-input-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .ngram-input {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            width: 80px;
+        }
+
+        .ngram-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 12px;
+            background: #1a73e8;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 500;
             transition: background 0.3s;
         }
-        .btn:hover {
-            background: #2980b9;
+
+        .ngram-btn:hover {
+            background: #0d47a1;
         }
-        .btn-secondary {
-            background: #95a5a6;
+
+        .quick-links {
+            margin-top: 15px;
         }
-        .btn-secondary:hover {
-            background: #7f8c8d;
+
+        .quick-link {
+            display: inline-block;
+            margin: 3px;
+            padding: 6px 12px;
+            background: #eceff1;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            color: #37474f;
+            transition: all 0.3s;
         }
+
+        .quick-link:hover, .quick-link.active {
+            background: #1a73e8;
+            color: #fff;
+        }
+
         .btn-container {
             text-align: center;
             margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
         }
-        .progress-bar {
-            background: #ecf0f1;
-            height: 10px;
-            border-radius: 5px;
-            margin-top: 5px;
-            overflow: hidden;
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: background 0.3s;
         }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3498db, #2ecc71);
-            border-radius: 5px;
+
+        .btn-primary {
+            background: #1a73e8;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #0d47a1;
+        }
+
+        .btn-secondary {
+            background: #eceff1;
+            color: #37474f;
+        }
+
+        .btn-secondary:hover {
+            background: #cfd8dc;
+        }
+
+        .btn-success {
+            background: #43a047;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #2e7d32;
+        }
+
+        .formula {
+            background: #f0f8ff;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Cambria Math', serif;
+            margin: 12px 0;
+        }
+
+        .info-box ul {
+            margin: 8px 0;
+            padding-left: 18px;
         }
     </style>
 </head>
@@ -117,51 +256,103 @@
     <div class="container">
         <h1>📊 Resultados del análisis</h1>
         <div class="subtitle">{{ texto.titulo }}</div>
-        
+
+        <div class="info-box">
+            <strong>Procesamiento aplicado:</strong> Conversión a minúsculas, eliminación de puntuación y stopwords.
+        </div>
+
         <div class="stats-card">
             <div class="stats-number">{{ total_palabras }}</div>
-            <div class="stats-label">palabras encontradas en total</div>
+            <div class="stats-label">Palabras válidas</div>
         </div>
-        
-        <h2>📈 Histograma de palabras (Top 20)</h2>
-        
-        {% if palabras_comunes %}
-        <table>
-            <thead>
-                <tr>
-                    <th width="10%">#</th>
-                    <th width="40%">Palabra</th>
-                    <th width="25%">Frecuencia</th>
-                    <th width="25%">Frecuencia relativa</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for palabra, frecuencia in palabras_comunes %}
-                <tr>
-                    <td class="word-rank">{{ forloop.counter }}</td>
-                    <td><strong>{{ palabra }}</strong></td>
-                    <td>{{ frecuencia }} ocurrencias</td>
-                    <td>
-                        <div>{% widthratio frecuencia total_palabras 100 %}%</div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: {% widthratio frecuencia total_palabras 100 %}%"></div>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <div style="text-align: center; padding: 40px; color: #7f8c8d;">
-            <div style="font-size: 48px;">📝</div>
-            <h3>No se encontraron palabras en el texto</h3>
-            <p>El archivo podría estar vacío o en un formato no compatible</p>
+
+        <div class="results-container">
+            <div class="results-column">
+                <div class="table-container">
+                    <h2 class="table-title">📈 Palabras individuales (Top 20)</h2>
+                    {% if palabras_comunes %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Palabra</th>
+                                <th>Frecuencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for palabra, frecuencia in palabras_comunes %}
+                            <tr>
+                                <td class="word-rank">{{ forloop.counter }}</td>
+                                <td>{{ palabra }}</td>
+                                <td>
+                                    {{ frecuencia }}
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: {% widthratio frecuencia total_palabras 100 %}%"></div>
+                                    </div>
+                                    <small>{% widthratio frecuencia total_palabras 100 %}%</small>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p style="text-align:center;color:#78909c;">📝 No se encontraron palabras</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if n_grama > 1 %}
+            <div class="results-column">
+                <div class="table-container">
+                    <h2 class="table-title">📊 N-Gramas ({{ n_grama }})</h2>
+                    {% if ngramas_comunes %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>N-Grama</th>
+                                <th>Frecuencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ngrama, frecuencia in ngramas_comunes %}
+                            <tr>
+                                <td class="word-rank">{{ forloop.counter }}</td>
+                                <td>{{ ngrama }}</td>
+                                <td>{{ frecuencia }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p style="text-align:center;color:#78909c;">⚠️ No hay suficientes palabras</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
-        
+
+        <div class="ngram-config">
+            <h3>🔧 Configurar N-Gramas</h3>
+            <form method="get" action="{% url 'analizar_texto' texto.id %}">
+                <div class="ngram-input-container">
+                    <label for="n_grama">Tamaño:</label>
+                    <input type="number" name="n_grama" id="n_grama" value="{{ n_grama }}" min="1" max="10" class="ngram-input">
+                    <button type="submit" class="ngram-btn">Calcular</button>
+                </div>
+            </form>
+
+            <div class="quick-links">
+                <a href="{% url 'analizar_texto' texto.id %}?n_grama=1" class="quick-link {% if n_grama == 1 %}active{% endif %}">Palabras (1)</a>
+                <a href="{% url 'analizar_texto' texto.id %}?n_grama=2" class="quick-link {% if n_grama == 2 %}active{% endif %}">Bigramas (2)</a>
+                <a href="{% url 'analizar_texto' texto.id %}?n_grama=3" class="quick-link {% if n_grama == 3 %}active{% endif %}">Trigramas (3)</a>
+            </div>
+        </div>
+
         <div class="btn-container">
-            <a href="{% url 'subir_texto' %}" class="btn">📤 Analizar otro texto</a>
-            <a href="{% url 'lista_textos' %}" class="btn btn-secondary">← Volver a la lista</a>
+            <a href="{% url 'subir_texto' %}" class="btn btn-primary">📤 Analizar otro texto</a>
+            <a href="{% url 'ver_procesamiento' texto.id %}" class="btn btn-success">🔍 Ver Procesamiento</a>
+            <a href="{% url 'lista_textos' %}" class="btn btn-secondary">← Volver</a>
         </div>
     </div>
 </body>
