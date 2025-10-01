@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparación MLE - Sistema de Análisis</title>
+    <style>
+        :root {
+            --verde-principal: #2E8B57;
+            --verde-oscuro: #1F6B4D;
+            --verde-claro: #E8F5E8;
+            --acento-dorado: #C8A951;
+            --texto-oscuro: #2C3E50;
+            --texto-claro: #7F8C8D;
+            --borde-suave: #D1E7DD;
+            --rojo-suave: #F8D7DA;
+            --rojo-oscuro: #DC3545;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0;
+            padding: 20px;
+            background-color: #f8fbf9;
+            color: var(--texto-oscuro);
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(46, 139, 87, 0.1);
+            border: 1px solid var(--borde-suave);
+        }
+        h1 {
+            color: var(--verde-oscuro);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--texto-claro);
+            margin-bottom: 35px;
+            font-size: 1.1em;
+        }
+        .comparacion-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .seccion-comparacion {
+            background: var(--verde-claro);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid var(--verde-principal);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .seccion-sin {
+            border-left-color: var(--rojo-oscuro);
+            background: #fef7f7;
+        }
+        .seccion-con {
+            border-left-color: var(--verde-principal);
+            background: var(--verde-claro);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--borde-suave);
+        }
+        th {
+            background-color: var(--verde-oscuro);
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f8fbf9;
+        }
+        tr:hover {
+            background-color: var(--verde-claro);
+            transition: background-color 0.2s ease;
+        }
+        .probabilidad {
+            font-weight: bold;
+            color: var(--verde-oscuro);
+        }
+        .stats-card {
+            background: linear-gradient(135deg, var(--verde-principal) 0%, var(--verde-oscuro) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.2);
+        }
+        .stats-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .configuracion {
+            background: var(--verde-claro);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 5px solid var(--verde-principal);
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            background: var(--texto-claro);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-comparar {
+            background: var(--verde-principal);
+        }
+        .btn-comparar.active {
+            background: var(--acento-dorado);
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(200, 169, 81, 0.3);
+        }
+        .btn-success {
+            background: var(--verde-principal);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: white;
+        }
+        .btn-comparar:hover {
+            background: var(--verde-oscuro);
+        }
+        .btn-success:hover {
+            background: var(--verde-oscuro);
+        }
+        .formula {
+            font-family: 'Cambria Math', serif;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid var(--borde-suave);
+            font-size: 1.1em;
+        }
+        .custom-ngram-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .custom-ngram-input input {
+            padding: 10px 12px;
+            width: 80px;
+            border: 2px solid var(--borde-suave);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .custom-ngram-input input:focus {
+            border-color: var(--verde-principal);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+        }
+        .custom-ngram-input button {
+            padding: 10px 18px;
+            background: var(--verde-principal);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .custom-ngram-input button:hover {
+            background: var(--verde-oscuro);
+            transform: translateY(-2px);
+        }
+        .info-text {
+            font-size: 13px;
+            color: var(--texto-claro);
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .nav-buttons {
+            text-align: center;
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Comparación: MLE con vs sin Fronteras</h1>
+        <div class="subtitle">{{ texto.titulo }} - {{ n_grama }}-gramas</div>
+        
+        <div class="configuracion">
+            <h3>Configuración de la Comparación</h3>
+            <p><strong>Fórmula MLE aplicada:</strong> P(w<sub>i</sub>|w<sub>i-{{ n_grama|add:"-1" }}</sub><sup>i-1</sup>) = C(w<sub>i-{{ n_grama|add:"-1" }}</sub><sup>i</sup>) / C(w<sub>i-{{ n_grama|add:"-1" }}</sub><sup>i-1</sup>)</p>
+            
+            <div>
+                <strong>Configurar n-grama:</strong>
+                <div style="display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap;">
+                    <a href="{% url 'comparar_probabilidades' texto.id %}?n_grama=2" 
+                       class="btn {% if n_grama == 2 %}btn-comparar active{% else %}btn-comparar{% endif %}">Bigramas (2)</a>
+                    <a href="{% url 'comparar_probabilidades' texto.id %}?n_grama=3" 
+                       class="btn {% if n_grama == 3 %}btn-comparar active{% else %}btn-comparar{% endif %}">Trigramas (3)</a>
+                    <a href="{% url 'comparar_probabilidades' texto.id %}?n_grama=4" 
+                       class="btn {% if n_grama == 4 %}btn-comparar active{% else %}btn-comparar{% endif %}">4-gramas</a>
+                    <a href="{% url 'comparar_probabilidades' texto.id %}?n_grama=5" 
+                       class="btn {% if n_grama == 5 %}btn-comparar active{% else %}btn-comparar{% endif %}">5-gramas</a>
+                    
+                    <!-- Campo personalizado para ingresar cualquier n-grama -->
+                    <div class="custom-ngram-input">
+                        <form method="get" action="{% url 'comparar_probabilidades' texto.id %}" style="display: flex; align-items: center; gap: 8px;">
+                            <input type="number" name="n_grama" min="2" max="20" value="{{ n_grama }}" 
+                                   placeholder="Número" required style="width: 80px;">
+                            <button type="submit">Aplicar</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="info-text">
+                    Puedes ingresar cualquier número entre 2 y 20 para comparar n-gramas personalizados
+                </div>
+            </div>
+        </div>
+
+        <!-- ESTADÍSTICAS COMPARATIVAS -->
+        <div class="comparacion-container">
+            <div class="stats-card">
+                <h3>SIN Fronteras</h3>
+                <p>Palabras: {{ sin_fronteras.total_palabras }}</p>
+                <p>{{ n_grama }}-gramas únicos: {{ sin_fronteras.total_ngramas }}</p>
+            </div>
+            
+            <div class="stats-card">
+                <h3>CON Fronteras</h3>
+                <p>Palabras: {{ con_fronteras.total_palabras }}</p>
+                <p>{{ n_grama }}-gramas únicos: {{ con_fronteras.total_ngramas }}</p>
+            </div>
+        </div>
+
+        <!-- COMPARACIÓN LADO A LADO -->
+        <div class="comparacion-container">
+            <!-- SIN FRONTERAS -->
+            <div class="seccion-comparacion seccion-sin">
+                <h3>SIN Fronteras</h3>
+                <p><em>Texto procesado sin delimitadores de oración</em></p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N-grama</th>
+                            <th>Frecuencia</th>
+                            <th>Probabilidad MLE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ngrama, datos in sin_fronteras.top_ngramas %}
+                        <tr>
+                            <td><strong>{{ ngrama }}</strong></td>
+                            <td>{{ datos.frecuencia_ngrama }}</td>
+                            <td class="probabilidad">
+                                {{ datos.probabilidad|floatformat:4 }}
+                                <br>
+                                <small>P({{ datos.palabra_objetivo }}|{{ datos.contexto }})</small>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- CON FRONTERAS -->
+            <div class="seccion-comparacion seccion-con">
+                <h3>CON Fronteras</h3>
+                <p><em>Texto procesado con delimitadores &lt;s&gt; / &lt;/s&gt;</em></p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N-grama</th>
+                            <th>Frecuencia</th>
+                            <th>Probabilidad MLE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ngrama, datos in con_fronteras.top_ngramas %}
+                        <tr>
+                            <td><strong>{{ ngrama }}</strong></td>
+                            <td>{{ datos.frecuencia_ngrama }}</td>
+                            <td class="probabilidad">
+                                {{ datos.probabilidad|floatformat:4 }}
+                                <br>
+                                <small>P({{ datos.palabra_objetivo }}|{{ datos.contexto }})</small>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BOTONES DE NAVEGACIÓN -->
+        <div class="nav-buttons">
+            <a href="{% url 'analizar_texto' texto.id %}?n_grama={{ n_grama }}" class="btn btn-success">Analisis Detallado</a>
+            <a href="{% url 'lista_textos' %}" class="btn">Volver a la Lista</a>
+        </div>
+    </div>
+
+    <script>
+        // Función para validar el input personalizado
+        document.addEventListener('DOMContentLoaded', function() {
+            const customInput = document.querySelector('input[name="n_grama"]');
+            const form = customInput.closest('form');
+            
+            form.addEventListener('submit', function(e) {
+                const value = parseInt(customInput.value);
+                if (value < 2 || value > 20) {
+                    e.preventDefault();
+                    alert('Por favor ingresa un número entre 2 y 20');
+                    customInput.focus();
+                }
+            });
+            
+            // Resaltar el botón personalizado si el n-grama actual no es uno de los predeterminados
+            const predefinedValues = [2, 3, 4, 5];
+            const currentNgrama = {{ n_grama }};
+            
+            if (!predefinedValues.includes(currentNgrama)) {
+                customInput.style.borderColor = 'var(--acento-dorado)';
+                customInput.style.boxShadow = '0 0 5px rgba(200, 169, 81, 0.3)';
+            }
+        });
+    </script>
+</body>
+</html>

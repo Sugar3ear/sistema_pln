@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenar Modelo - Sistema de Análisis</title>
+    <style>
+        :root {
+            --verde-principal: #2E8B57;
+            --verde-oscuro: #1F6B4D;
+            --verde-claro: #E8F5E8;
+            --acento-dorado: #C8A951;
+            --texto-oscuro: #2C3E50;
+            --texto-claro: #7F8C8D;
+            --borde-suave: #D1E7DD;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0;
+            padding: 20px;
+            background-color: #f8fbf9;
+            color: var(--texto-oscuro);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(46, 139, 87, 0.1);
+            border: 1px solid var(--borde-suave);
+        }
+        h1 {
+            color: var(--verde-oscuro);
+            text-align: center;
+            margin-bottom: 35px;
+            font-weight: 600;
+            font-size: 2.2em;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--verde-oscuro);
+            font-size: 15px;
+        }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--borde-suave);
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        select:focus, input[type="number"]:focus {
+            border-color: var(--verde-principal);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--verde-claro);
+            border-radius: 8px;
+        }
+        .checkbox-group input {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+        button {
+            padding: 15px 30px;
+            background: var(--verde-principal);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+        button:hover {
+            background: var(--verde-oscuro);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--texto-claro);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        .btn-primary {
+            background: var(--verde-principal);
+        }
+        .btn-primary:hover {
+            background: var(--verde-oscuro);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+        }
+        .btn:hover {
+            background: #6c757d;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+        .info-box {
+            background: var(--verde-claro);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 5px solid var(--verde-principal);
+            font-size: 15px;
+        }
+        .info-box strong {
+            color: var(--verde-oscuro);
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid var(--borde-suave);
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .modelo-info {
+            background: var(--verde-claro);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border: 1px solid var(--borde-suave);
+        }
+        .modelo-info h4 {
+            color: var(--verde-oscuro);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .modelo-info ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+        .modelo-info li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .formula {
+            text-align: center;
+            font-family: 'Cambria Math', serif;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--borde-suave);
+            font-size: 1.1em;
+        }
+        small {
+            color: var(--texto-claro);
+            font-size: 13px;
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Entrenar Modelo de N-gramas</h1>
+        
+        <div class="info-box">
+            <strong>Objetivo:</strong> Entrenar un modelo de n-gramas que será usado para el sistema de autocompletado. 
+            El modelo calculará las probabilidades condicionales de las palabras basándose en sus contextos.
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="texto_id">Seleccionar corpus para entrenar:</label>
+                <select name="texto_id" id="texto_id" required>
+                    <option value="">-- Selecciona un texto --</option>
+                    {% for texto in textos %}
+                    <option value="{{ texto.id }}">{{ texto.titulo }} (subido el {{ texto.fecha_subida|date:"d/m/Y" }})</option>
+                    {% endfor %}
+                </select>
+                <small>Elige el texto que servirá como base para el modelo</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="n_grama">Orden del n-grama (n):</label>
+                <input type="number" name="n_grama" id="n_grama" 
+                    min="2" max="20" value="3" required>
+                <small>
+                    Numero de palabras en la secuencia. Mayor n captura mas contexto pero requiere mas datos.
+                </small>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" name="fronteras" id="fronteras" value="true">
+                <label for="fronteras">Incluir fronteras de oracion (&lt;s&gt;, &lt;/s&gt;)</label>
+            </div>
+            <small style="margin-bottom: 20px; display: block;">
+                Las fronteras ayudan al modelo a entender los limites de las oraciones
+            </small>
+            
+            <div class="modelo-info">
+                <h4>Formula del Modelo</h4>
+                <p>Para un modelo de <span id="n-ejemplo">2</span>-gramas:</p>
+                <div class="formula">
+                    P(w<sub>i</sub>|w<sub>i-1</sub>) = C(w<sub>i-1</sub>, w<sub>i</sub>) / C(w<sub>i-1</sub>)
+                </div>
+                <p>Donde:</p>
+                <ul>
+                    <li><strong>P(w<sub>i</sub>|w<sub>i-1</sub>)</strong>: Probabilidad de la palabra w<sub>i</sub> dado w<sub>i-1</sub></li>
+                    <li><strong>C(w<sub>i-1</sub>, w<sub>i</sub>)</strong>: Frecuencia del bigrama</li>
+                    <li><strong>C(w<sub>i-1</sub>)</strong>: Frecuencia de la palabra anterior</li>
+                </ul>
+            </div>
+            
+            <button type="submit">Entrenar Modelo</button>
+        </form>
+        
+        <div class="btn-container">
+            <a href="{% url 'autocompletado' %}" class="btn btn-primary">Probar Autocompletado</a>
+            <a href="{% url 'lista_textos' %}" class="btn">Volver a la lista</a>
+        </div>
+    </div>
+
+    <script>
+        // Actualizar la fórmula cuando cambie el n-grama
+        document.getElementById('n_grama').addEventListener('change', function() {
+            const n = parseInt(this.value);
+            const nEjemplo = document.getElementById('n-ejemplo');
+            const formula = document.querySelector('.formula');
+            
+            nEjemplo.textContent = n;
+            
+            if (n === 2) {
+                formula.innerHTML = 'P(w<sub>i</sub>|w<sub>i-1</sub>) = C(w<sub>i-1</sub>, w<sub>i</sub>) / C(w<sub>i-1</sub>)';
+            } else if (n === 3) {
+                formula.innerHTML = 'P(w<sub>i</sub>|w<sub>i-2</sub>, w<sub>i-1</sub>) = C(w<sub>i-2</sub>, w<sub>i-1</sub>, w<sub>i</sub>) / C(w<sub>i-2</sub>, w<sub>i-1</sub>)';
+            } else {
+                formula.innerHTML = `P(w<sub>i</sub>|w<sub>i-${n-1}</sub><sup>i-1</sup>) = C(w<sub>i-${n-1}</sub><sup>i</sup>) / C(w<sub>i-${n-1}</sub><sup>i-1</sup>)`;
+            }
+        });
+        
+        // Seleccionar automáticamente el primer texto disponible
+        document.addEventListener('DOMContentLoaded', function() {
+            const select = document.getElementById('texto_id');
+            if (select.options.length > 1) {
+                select.selectedIndex = 1;
+            }
+        });
+    </script>
+</body>
+</html>

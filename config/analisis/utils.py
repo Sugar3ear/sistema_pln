@@ -274,3 +274,47 @@ def procesar_texto_completo(contenido, n_grama=1, usar_fronteras=False, n_gramas
         'usar_fronteras': usar_fronteras,
         'n_gramas_comparacion': n_gramas_comparacion
     }
+
+def predecir_siguiente_palabra(contexto, ngramas_probabilidades, n=2):
+    """
+    Predice la siguiente palabra dado un contexto y un modelo de n-gramas
+    """
+    sugerencias = []
+    
+    for ngrama, datos in ngramas_probabilidades.items():
+        if datos['contexto'] == contexto:
+            sugerencias.append((datos['palabra_objetivo'], datos['probabilidad']))
+    
+    # Ordenar por probabilidad descendente
+    sugerencias.sort(key=lambda x: x[1], reverse=True)
+    
+    return sugerencias
+
+def generar_modelo_autocompletado(tokens, n=2):
+    """
+    Genera un modelo de autocompletado basado en n-gramas
+    """
+    if n < 2:
+        return {}
+    
+    # Calcular probabilidades de n-gramas
+    ngramas_prob = calcular_probabilidad_ngramas(tokens, n)
+    
+    # Organizar por contextos
+    modelo = {}
+    for ngrama, datos in ngramas_prob.items():
+        contexto = datos['contexto']
+        if contexto not in modelo:
+            modelo[contexto] = []
+        
+        modelo[contexto].append({
+            'palabra': datos['palabra_objetivo'],
+            'probabilidad': datos['probabilidad'],
+            'frecuencia': datos['frecuencia_ngrama']
+        })
+    
+    # Ordenar cada lista de sugerencias por probabilidad
+    for contexto in modelo:
+        modelo[contexto].sort(key=lambda x: x['probabilidad'], reverse=True)
+    
+    return modelo
